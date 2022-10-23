@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
@@ -11,7 +10,7 @@ from lab_s01_utils import print_function_name
 def todo_2():
     print_function_name()
 
-    digits = datasets.load_digits()
+    digits = datasets.fetch_olivetti_faces()
 
     print(digits.DESCR)
     print(f'digits data:\n {digits.data},\n len: {len(digits.data)}')
@@ -19,16 +18,16 @@ def todo_2():
     print(f'digits target_names:\n {digits.target_names}')
     print(f'digits images:\n {digits.images},\n len: {len(digits.images)}')
 
-    print(digits.data[-1])
-    print(digits.images[-1])
+    # print(digits.data[-1])
+    # print(digits.images[-1])
 
-    index = -1
-    print(digits.target[index])
-    plt.imshow(digits.images[index], cmap=plt.cm.gray_r)
-    plt.show()
+    for index in range(30, 40):
+        print(digits.target[index])
+        plt.imshow(digits.images[index], cmap=plt.cm.gray_r)
+        plt.show()
 
-    plt.imshow([digits.data[index]], cmap=plt.cm.gray_r)
-    plt.show()
+        plt.imshow([digits.data[index]], cmap=plt.cm.gray_r)
+        plt.show()
 
 
 def todo_3():
@@ -37,7 +36,7 @@ def todo_3():
     digits = datasets.load_digits()
 
     X_train, X_test, y_train, y_test = train_test_split(
-        digits.data, digits.target, test_size=0.33, random_state=42
+        digits.data, digits.target, test_size=0.2, random_state=42
     )
 
     print(f'{len(digits.data)=}')
@@ -78,6 +77,14 @@ def todo_4():
     plot_gallery('Olivetti faces', faces.images[:n_components])
     plt.show()
 
+    X_train, X_test, y_train, y_test = train_test_split(
+        faces.data, faces.target, test_size=0.2, random_state=42
+    )
+
+    print(f'{len(faces.data)=}')
+    print(f'{len(X_train.data)=}')
+    print(f'{len(X_test.data)=}')
+
 
 def todo_5():
     print_function_name()
@@ -89,6 +96,14 @@ def todo_5():
     print(f'diabetes feature_names:\n {diabetes.feature_names}')
     print(diabetes.frame.head(5))
     print(diabetes.frame.info())
+
+
+def todo_5a():
+    from sklearn import datasets
+
+    from sklearn.datasets import fetch_openml
+    credit = fetch_openml(name='credit-g')
+    print(credit)
 
 
 def todo_6():
@@ -156,33 +171,40 @@ def todo_9_10():
     from sklearn import tree
 
     # OR gate
-    X = [[0, 0],
-         [0, 1],
-         [1, 0],
-         [1, 1]]
-    y = [0, 1, 1, 1]
+    X = [[0, 0, 0],
+         [0, 0, 1],
+         [0, 1, 0],
+         [0, 1, 1],
+         [1, 0, 0],
+         [1, 0, 1],
+         [1, 1, 0],
+         [1, 1, 1]]
+    y = [0, 0, 0, 0, 0, 0, 0, 1]
 
     clf = DecisionTreeClassifier()
     clf.fit(X, y)
 
-    print(f'{clf.predict([[0, 0]])=}')
-    print(f'{clf.predict([[0, 1]])=}')
-    print(f'{clf.predict([[1, 0]])=}')
-    print(f'{clf.predict([[1, 1]])=}')
+    # print(f'{clf.predict([[0, 0]])=}')
+    # print(f'{clf.predict([[0, 1]])=}')
+    # print(f'{clf.predict([[1, 0]])=}')
+    # print(f'{clf.predict([[1, 1]])=}')
+    # print(f'{clf.predict([[1, 1]])=}')
+    # print(f'{clf.predict([[1, 1]])=}')
 
-    tree.plot_tree(clf, feature_names=['X1', 'X2'], filled=True, class_names=['0', '1'])
+    tree.plot_tree(clf, feature_names=['X1', 'X2', 'X3'], filled=True, class_names=['0', '1'])
     plt.show()
 
 
 def main():
-    todo_2()
-    todo_3()
-    todo_4()
-    todo_5()
-    todo_6()
-    todo_6_2()
-    todo_7()
-    todo_8()
+    # todo_2()
+    # todo_3()
+    # todo_4()
+    # todo_5()
+    # todo_5a()
+    # todo_6()
+    # todo_6_2()
+    # todo_7()
+    # todo_8()
     todo_9_10()
 
 
