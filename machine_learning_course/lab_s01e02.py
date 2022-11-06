@@ -11,14 +11,86 @@ from sklearn import pipeline
 
 from lab_s01_utils import print_function_name
 
+from sklearn.model_selection import train_test_split
+from sklearn import datasets, svm, metrics
+import matplotlib.pyplot as plt
+
 
 def todo_1():
     print_function_name()
+
+    digits = datasets.fetch_olivetti_faces()
+
+    _, axes = plt.subplots(nrows=1, ncols=8, figsize=(64, 64))
+    for ax, image, label in zip(axes, digits.images, digits.target):
+        ax.set_axis_off()
+        ax.imshow(image, cmap=plt.cm.gray, interpolation="nearest")
+        ax.set_title("Training: %i" % label)
+
+    # flatten the images
+    n_samples = len(digits.images)
+    data = digits.images.reshape((n_samples, -1))
+
+    # Create a classifier: a support vector classifier
+    clf = svm.SVC(gamma='scale')
+
+    # Split data into 50% train and 50% test subsets
+    X_train, X_test, y_train, y_test = train_test_split(
+        data, digits.target, test_size=0.25, shuffle=True
+    )
+
+    # Learn the digits on the train subset
+    clf.fit(X_train, y_train)
+
+    # Predict the value of the digit on the test subset
+    predicted = clf.predict(X_test)
+
+    _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
+    for ax, image, prediction in zip(axes, X_test, predicted):
+        ax.set_axis_off()
+        image = image.reshape(64, 64)
+        ax.imshow(image, cmap=plt.cm.gray, interpolation="nearest")
+        ax.set_title(f"Prediction: {prediction}")
+
+    print(
+        f"Classification report for classifier {clf}:\n"
+        f"{metrics.classification_report(y_test, predicted)}\n"
+    )
+
+    disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+    disp.figure_.suptitle("Confusion Matrix")
+    print(f"Confusion matrix:\n{disp.confusion_matrix}")
+
+    plt.show()
+
+    # print(digits.DESCR)
+    # print(f'digits data:\n {digits.data},\n len: {len(digits.data)}')
+    # print(f'digits target:\n {digits.target},\n len: {len(digits.target)}')
+    # print(f'digits target_names:\n {digits.target_names}')
+    # print(f'digits images:\n {digits.images},\n len: {len(digits.images)}')
+
+    # print(digits.data[-1])
+    # print(digits.images[-1])
+
+    # for index in range(30, 40):
+    #     print(digits.target[index])
+    #     plt.imshow(digits.images[index], cmap=plt.cm.gray_r)
+    #     plt.show()
+    #
+    #     plt.imshow([digits.data[index]], cmap=plt.cm.gray_r)
+    #     plt.show()
 
 
 def todo_2():
     print_function_name()
 
+    diabetes = datasets.load_diabetes(as_frame=True)
+    print(diabetes.DESCR)
+    print(f'diabetes data:\n {diabetes.data},\n len: {len(diabetes.data)}')
+    print(f'diabetes target:\n {diabetes.target},\n len: {len(diabetes.target)}')
+    print(f'diabetes feature_names:\n {diabetes.feature_names}')
+    print(diabetes.frame.head(5))
+    print(diabetes.frame.info())
 
 def todo_3():
     print_function_name()
@@ -30,12 +102,12 @@ def todo_3():
     # marka - przebieg - czy uszkodzony
     X = [
         ['Opel', 250000, 'tak'],
-        ['Opel',  50000, 'nie'],
+        ['Opel', 50000, 'nie'],
         ['Opel', 100000, 'tak'],
         ['Ford', 300000, 'nie'],
-        ['VW',     5000, 'tak'],
-        ['VW',   400000, 'nie'],
-        ['Ford',  75000, 'nie']
+        ['VW', 5000, 'tak'],
+        ['VW', 400000, 'nie'],
+        ['Ford', 75000, 'nie']
     ]
 
     for x in X:
@@ -152,7 +224,7 @@ def regressor_9000(x: float) -> float:
         # 0.14,0.28
         # 2.00,4.00
         # x     y
-        return x*2
+        return x * 2
 
 
 def todo_final_boss():
@@ -170,17 +242,18 @@ def todo_final_boss():
     _print_regressor_score(y_test, y_predicted)
 
     plt.scatter(X_test, y_test, c='red', marker='*')
+
     plt.scatter(X_test, y_predicted, c='green', marker='o')
     plt.show()
 
 
 def main():
-    # todo_1() - not implemented yet
+    todo_1()
     # todo_2() - not implemented yet
-    todo_3()
-    todo_4()
-    todo_5_6()
-    todo_final_boss()
+    # todo_3()
+    # todo_4()
+    # todo_5_6()
+    # todo_final_boss()
 
 
 if __name__ == '__main__':
